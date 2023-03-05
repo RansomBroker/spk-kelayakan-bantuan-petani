@@ -11,10 +11,16 @@ function create_user($form) {
     $has_password = password_hash($password, PASSWORD_DEFAULT);
 
     if ($password != $confirm_password) {
-
+        set_flash_message('password_error', 'Password tidak sesuai');
     }
 
     $mysql = $connection->query("INSERT INTO users (username, password) VALUES ('$username', '$has_password')");
+
+    if ($connection->affected_rows > 0) {
+        set_flash_message('register_success', 'Berhasil melakukan pendaftaran');
+    } else {
+        set_flash_message('register_failed', 'Gagal melakukan pendaftaran');
+    }
 
     return $connection->affected_rows;
 
