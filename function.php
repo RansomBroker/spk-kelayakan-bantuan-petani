@@ -27,7 +27,7 @@ function create_user($form) {
         set_flash_message('register_failed', 'Gagal melakukan pendaftaran');
     }
 }
-function login($form){
+function login($form) {
     global $connection;
 
 
