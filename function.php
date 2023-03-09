@@ -1,6 +1,7 @@
 <?php
 
 include 'connection.php';
+include 'helper.php';
 
 function create_user($form) {
     global $connection;
@@ -25,36 +26,4 @@ function create_user($form) {
     return $connection->affected_rows;
 
 }
-
-function set_flash_message($name, $message) {
-
-    // if exist then remove
-    if (isset($_SESSION[$name])) {
-        unset($_SESSION[$name]);
-    }
-
-    $_SESSION[$name] = $message;
-}
-
-
-function get_flash_name($name) {
-
-    if (isset($_SESSION[$name])) {
-        return $name;
-    }
-    return "";
-}
-
-function get_flash_message($name) {
-
-    if (isset($_SESSION[$name])) {
-        $message = $_SESSION[$name];
-        unset($_SESSION[$name]);
-        return $message;
-    } else {
-        return '';
-    }
-}
-
-
 ?>
