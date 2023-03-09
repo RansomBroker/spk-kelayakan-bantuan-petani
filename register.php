@@ -1,5 +1,12 @@
+<?php 
+	include "function.php";
+
+	if(isset($_POST) && count($_POST) > 0) {
+		create_user($_POST);
+	}
+?>
 <!DOCTYPE html>
-<html>
+<html>	
 <head>
     <?php include "head.php"?>
 	<title>Login</title>
@@ -8,9 +15,11 @@
 <body class="bg-success bg-opacity-75 d-flex justify-content-center align-items-center vh-100">
 	<div class="mx-5 py-5 card rounded login w-25 ">
 		<div class="card-body">
-		<div class="alert alert-danger" role="alert">
-			This is a danger alert—check it out!
-		</div>
+		<?php if(get_flash_name('password_error') != ""):?>
+			<div class="alert alert-danger" role="alert">
+				<?= get_flash_message('password_error')?>
+			</div>	
+		<?php endif;?>
 			<form class="" method="POST" action="">
 				<div class="d-flex flex-row justify-content-center">
 					<div class="d-flex flex-column">
