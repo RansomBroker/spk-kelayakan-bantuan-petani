@@ -1,5 +1,14 @@
 <?php 
-	include "helper.php";
+	session_start();
+	include "function.php";
+
+	if(isset($_POST) && count($_POST) > 0) {
+		login($_POST);
+	}
+
+	if(isset($_SESSION['login'])){
+		redirect('index.php');
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,6 +27,7 @@
 				<?= get_flash_message('register_success')?>
 			</div>	
 		<?php endif;?>
+
 			<form class="" method="POST" action="">
 				<div class="d-flex flex-row justify-content-center">
 					<div class="d-flex flex-column">
