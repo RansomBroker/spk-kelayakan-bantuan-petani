@@ -18,10 +18,10 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            
-            <li class="nav-item <?php if ((isset($_GET['halaman']) && $_GET['halaman'] == 'olah-data-petani')) :?> active <?php endif;?>">
-                <a class="nav-link" href="olah-data.php?halaman=olah-data-petani">
-                    <i class="fa fa-database" aria-hidden="true"></i>
+
+            <li class="nav-item <?php if ((isset($_GET['halaman']) && $_GET['halaman'] == 'olah-data')) :?> active <?php endif;?>">
+                <a class="nav-link" href="olah-data.php?halaman=olah-data">
+                    <i class="fas fa-database"></i>
                     <span>Olah Data Petani</span>
                 </a>
             </li>
