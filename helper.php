@@ -28,3 +28,8 @@ function get_flash_message($name) {
         return '';
     }
 }
+
+function redirect($url) {
+    header("Location:".$url, true, 301);
+    exit();
+}

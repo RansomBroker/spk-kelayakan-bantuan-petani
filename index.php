@@ -7,7 +7,7 @@
 
     <title>SPK</title>
 
-    <?php include "head.php"?>
+    <?php include "css.php"?>
 </head>
 
 <body id="page-top">
