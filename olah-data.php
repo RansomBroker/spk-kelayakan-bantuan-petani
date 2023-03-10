@@ -105,6 +105,7 @@
                             <table class="table table-bordered table-hover table-striped" id="table-data-petani">
                                 <thead>
                                     <tr>
+                                        <th>Action</th>
                                         <th>Kode Petani</th>
                                         <th>Nama Petani</th>
                                         <th>Alamat</th>
@@ -116,6 +117,7 @@
                                 <tbody>
                                     <?php foreach (ambil_data_petani() as $data_petani):?>
                                         <tr data-id-petani="<?= $data_petani['id']?>">
+                                            <td><a href="hapus-data-petani.php?id=<?=$data_petani['id']?>" class="btn btn-danger">Hapus</a></td>
                                             <td><?= $data_petani['kode_petani']?></td>
                                             <td><?= $data_petani['nama_petani']?></td>
                                             <td><?= $data_petani['alamat']?></td>
