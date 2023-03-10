@@ -2,9 +2,20 @@
     session_start();
     include "function.php";
 
-    if (isset($_POST['data-petani'])) {
-        tambah_data_petani($_POST);
+    if(!isset($_SESSION['login'])){
+        redirect('login.php');
     }
+    if (isset($_POST['data-petani'])) {
+        if ($_POST['id'] != "") {
+            update_data_petani($_POST);
+        }
+
+        if ($_POST['id'] = "") {
+            tambah_data_petani($_POST);
+        }
+    }
+
+    ambil_data_petani();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,11 +60,11 @@
                             <?= get_flash_message('failed_tambah_petani')?>
                         </div>
                     <?php endif;?>
-                    <form method="POST">
+                    <form method="POST" id="form-petani">
                         <div class="card card-body">
                             <h5 class="card-title">Tambah Data Petani</h5>
                             <div class="row">
-                                <input type="hidden" name="id" value="">
+                                <input type="text" name="id" value="" class="d-none">
                                 <div class="col-lg-3 col-12 mb-2">
                                     <label class="form-label">Kode Petani <sup class="text-danger">*</sup></label>
                                     <input type="text" class="form-control" name="kode-petani" required>
@@ -81,12 +92,42 @@
                             </div>
                             <div class="col-12 p-0 mt-2">
                                 <div class="d-flex justify-content-start">
-                                    <button type="submit" name="data-petani" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset"  class="btn btn-danger mx-2">Batal</button>
+                                    <button type="submit" name="data-petani" class="btn-submit btn btn-primary mr-2">Submit</button>
+                                    <button class="btn-reset btn btn-danger mx-2">Batal</button>
                                 </div>
                             </div>
                         </div>
                     </form>
+
+                    <div class="card card-body my-3">
+                        <h5 class="card-title">Data Petani</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped" id="table-data-petani">
+                                <thead>
+                                    <tr>
+                                        <th>Kode Petani</th>
+                                        <th>Nama Petani</th>
+                                        <th>Alamat</th>
+                                        <th>Tgl Permohonan</th>
+                                        <th>No Telpon</th>
+                                        <th>No KTP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach (ambil_data_petani() as $data_petani):?>
+                                        <tr data-id-petani="<?= $data_petani['id']?>">
+                                            <td><?= $data_petani['kode_petani']?></td>
+                                            <td><?= $data_petani['nama_petani']?></td>
+                                            <td><?= $data_petani['alamat']?></td>
+                                            <td><?= $data_petani['tgl_pemohonan']?></td>
+                                            <td><?= $data_petani['no_telp']?></td>
+                                            <td><?= $data_petani['no_telp']?></td>
+                                        </tr>
+                                    <?php endforeach;?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -123,7 +164,57 @@
     </div>
 
     <?php include "js.php"?>
+    <script>
+        $(document).ready(function () {
+            let tableDataPetani = $("#table-data-petani").DataTable();
 
+            $("#table-data-petani tbody").on('click', 'tr', function () {
+                let idPetani = $(this).attr('data-id-petani');
+                if ($(this).hasClass('selected')) {
+                    $('.btn-submit').text('Submit')
+                    $('input[name=kode-petani]').prop('readonly', false);
+                    $('#form-petani')[0].reset();
+                    $(this).removeClass('selected bg-primary text-white');
+                } else {
+                    tableDataPetani.$('tr.selected').removeClass('selected bg-primary text-white');
+                    $(this).addClass('selected bg-primary text-white');
+                    $('.btn-submit').text('Simpan Edit Data')
+                    $.ajax({
+                        url: 'ambil-data-petani.php?id=' + idPetani,
+                        method: 'GET',
+                        success: function (response) {
+                            let data = JSON.parse(response)
+                            /* set data jadi isi dari value */
+                            $('input[name=kode-petani]').prop('readonly', true);
+                            $('input[name=id]').val(data.id);
+                            $('input[name=kode-petani]').val(data.kode_petani.toUpperCase());
+                            $('input[name=nama-petani]').val(data.nama_petani);
+                            $('input[name=alamat-petani]').val(data.alamat);
+                            $('input[name=tgl-permohonan]').val(data.tgl_pemohonan);
+                            $('input[name=telpon]').val(data.no_telp);
+                            $('input[name=ktp]').val(data.no_ktp);
+                        }
+                    })
+                }
+            })
+
+            /* batal */
+            $(".btn-reset").click(function (e) {
+                e.preventDefault();
+                $('.btn-submit').text('Simpan Edit Data')
+                $('input[name=id]').val();
+                $('input[name=kode-petani]').prop('readonly', false);
+                if ($('#table-data-petani tbody tr').hasClass('selected')) {
+                    $('#table-data-petani tbody tr').removeClass('selected bg-primary text-white');
+                }
+                $('#form-petani')[0].reset();
+            })
+
+            $("input[name=kode-petani]").on('keyup', function () {
+                $(this).val($(this).val().toUpperCase())
+            })
+        })
+    </script>
 </body>
 
 </html>
