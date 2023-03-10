@@ -49,7 +49,7 @@
                     <h1 class="h3 mb-0 text-gray-800">Olah Data Petani</h1>
                 </div>
 
-                <div class="card card-body">
+                <div class="card card-body mb-3">
                     <?php if (get_flash_name('success_tambah_petani') != ""):?>
                         <div class="alert alert-success">
                             <?= get_flash_message('success_tambah_petani')?>
@@ -128,6 +128,78 @@
                                     <?php endforeach;?>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-body mb-3">
+                    <div class="card card-body mb-3">
+                        <?php if (get_flash_name('success_alternatif') != ""):?>
+                            <div class="alert alert-success">
+                                <?= get_flash_message('success_alternatif')?>
+                            </div>
+                        <?php endif;?>
+                        <?php if (get_flash_name('failed_alternatif') != ""):?>
+                            <div class="alert alert-danger">
+                                <?= get_flash_message('failed_alternatif')?>
+                            </div>
+                        <?php endif;?>
+                        <h5>Input Nilai Alternatif</h5>
+                        <form method="POST" id="form-alternatif">
+                            <div class="row">
+                                <div class="col-12 col-lg-4">
+                                    <label class="form-label">Kode Petani</label>
+                                    <select class="form-control" name="alternatif-kode-petani" required id="alternatif-kode-petani">
+                                        <option value="">---- Pilih Kode Petani -----</option>
+                                        <?php foreach (ambil_data_petani() as $petani):?>
+                                            <option value="<?= $petani['id']?>"><?= $petani['kode_petani']?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <label class="form-label">Nama Petani</label>
+                                    <input class="form-control" value="" name="alternatif-nama-petani" readonly>
+                                </div>
+                                <div class="col-12  mt-2">
+                                    <div class="d-flex justify-content-start">
+                                        <button type="submit" name="data-alternatif" class="btn-submit btn btn-primary mr-2">Submit</button>
+                                        <button class="btn-reset-alternatif btn btn-danger mx-2">Batal</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="card card-body my-3">
+                            <h5 class="card-title">Data Alternatif</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-striped" id="table-data-alternatif">
+                                    <thead>
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>Kode Petani</th>
+                                        <th>Nama Petani</th>
+                                        <th>Luas Lahan</th>
+                                        <th>Penghasilan</th>
+                                        <th>Hasil Panen</th>
+                                        <th>Lama Usaha</th>
+                                        <th>Jmlh Anggota Keluarga</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach (ambil_data_alternatif() as $data_alternatif):?>
+                                        <tr data-id-petani="<?= $data_alternatif['id']?>">
+                                            <td><a href="hapus-data-alternatif.php?id=<?=$data_alternatif['id']?>" class="btn btn-danger">Hapus</a></td>
+                                            <td><?= $data_alternatif['kode_petani']?></td>
+                                            <td><?= $data_alternatif['nama_petani']?></td>
+                                            <td><?= $data_alternatif['luas_lahan']?></td>
+                                            <td><?= $data_alternatif['penghasilan']?></td>
+                                            <td><?= $data_alternatif['hasil_panen']?></td>
+                                            <td><?= $data_alternatif['lama_usaha']?></td>
+                                            <td><?= $data_alternatif['jmlh_anggota_keluarga']?></td>
+                                        </tr>
+                                    <?php endforeach;?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -214,6 +286,25 @@
 
             $("input[name=kode-petani]").on('keyup', function () {
                 $(this).val($(this).val().toUpperCase())
+            })
+
+            /* ambil nama petani */
+            $("#alternatif-kode-petani").on('change', function () {
+                if ($(this).val().length < 1) {
+                    $('input[name=alternatif-nama-petani]').val("")
+                    return 0;
+                }
+
+                let id = $(this).val()
+                $.ajax({
+                    url: 'ambil-data-petani.php?id=' + id,
+                    method: 'GET',
+                    success: function (response) {
+                        let data = JSON.parse(response)
+                        /* set data jadi isi dari value */
+                        $('input[name=alternatif-nama-petani]').val(data.nama_petani)
+                    }
+                })
             })
         })
     </script>

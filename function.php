@@ -81,6 +81,23 @@ function ambil_data_petani() {
     return $data_petani;
 }
 
+function ambil_data_alternatif() {
+    global $connection;
+
+    $data_alternatif = $connection->query("
+        SELECT
+            *
+        FROM
+            data_petani
+        INNER JOIN
+            data_kriteria
+        ON 
+            data_petani.id = data_kriteria.id_petani
+	")->fetch_all(MYSQLI_ASSOC);
+
+    return $data_alternatif;
+}
+
 function update_data_petani($form) {
     global $connection;
 
