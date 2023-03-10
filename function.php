@@ -69,5 +69,47 @@ function tambah_data_petani($form) {
         set_flash_message('failed_tambah_petani', 'Gagal menambahkan data petani');
     }
 
+    redirect('olah-data.php?halaman=olah-data');
+
+}
+
+function ambil_data_petani() {
+    global $connection;
+
+    $data_petani = $connection->query("SELECT * FROM data_petani")->fetch_all(MYSQLI_ASSOC);
+
+    return $data_petani;
+}
+
+function update_data_petani($form) {
+    global $connection;
+
+    $id = $form['id'];
+    $kode_petani = htmlspecialchars(strtolower(stripcslashes($form['kode-petani'])));
+    $nama_petani = htmlspecialchars(strtolower(stripcslashes($form['nama-petani'])));
+    $alamat_petani = htmlspecialchars(strtolower(stripcslashes($form['alamat-petani'])));
+    $tgl_permohonan = $form['tgl-permohonan'];
+    $telpon = htmlspecialchars(strtolower(stripcslashes($form['telpon'])));
+    $ktp = htmlspecialchars(strtolower(stripcslashes($form['ktp'])));
+
+    $query = $connection->query("
+        UPDATE data_petani 
+        SET
+            kode_petani = '$kode_petani',
+            nama_petani = '$nama_petani',
+            alamat = '$alamat_petani',
+            tgl_pemohonan = '$tgl_permohonan',
+            no_telp = '$telpon',
+            no_ktp = '$ktp'
+         WHERE id = '$id'
+        ");
+
+    if ($connection->affected_rows > 0) {
+        set_flash_message('success_tambah_petani', 'Berhasil update data petani');
+    } else {
+        set_flash_message('failed_tambah_petani', 'Gagal update data petani');
+    }
+
+    redirect('olah-data.php?halaman=olah-data');
 }
 ?>
