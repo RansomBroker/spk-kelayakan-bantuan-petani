@@ -44,6 +44,11 @@ session_start();
                             <?= get_flash_message('failed_settings')?>
                         </div>
                     <?php endif;?>
+                    <?php if (get_flash_name('success_settings') != ""):?>
+                        <div class="alert alert-success">
+                            <?= get_flash_message('success_settings')?>
+                        </div>
+                    <?php endif;?>
                     <form method="POST" id>
                         <div class="card card-body">
                             <h5 class="card-title">Atur Nilai Kriteria</h5>
@@ -51,23 +56,23 @@ session_start();
                                 <input type="hidden" name="id" value="">
                                 <div class="col-lg-3 col-12 mb-2">
                                     <label class="form-label">Luas Lahan  <sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control desimal-input" name="luas_lahan" value='<?= $data_setinggs['luas_lahan']?>' required>
+                                    <input type="text" class="form-control desimal-input" name="luas_lahan" value='<?= $data_setinggs == NULL ? '': $data_setinggs['luas_lahan']?>' required>
                                 </div>
                                 <div class="col-lg-4 col-12 mb-2">
                                     <label class="form-label">Penghasilan <sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control desimal-input" name="penghasilan" value='<?= $data_setinggs['penghasilan']?>' required>
+                                    <input type="text" class="form-control desimal-input" name="penghasilan" value='<?= $data_setinggs == NULL ? '': $data_setinggs['penghasilan']?>' required>
                                 </div>
                                 <div class="col-lg-4 col-12 mb-2">
                                     <label class="form-label">Hasil Panen<sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control desimal-input" name="hasil_panen" value='<?= $data_setinggs['hasil_panen']?>' required>
+                                    <input type="text" class="form-control desimal-input" name="hasil_panen" value='<?= $data_setinggs == NULL ? '': $data_setinggs['hasil_panen']?>' required>
                                 </div>
                                 <div class="col-lg-3 col-12 mb-2">
                                     <label class="form-label">Lama Usaha Tani <sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control desimal-input" name="lama_usaha_tani" value='<?= $data_setinggs['lama_usaha_tani']?>' required>
+                                    <input type="text" class="form-control desimal-input" name="lama_usaha_tani" value='<?= $data_setinggs == NULL ? '': $data_setinggs['lama_usaha_tani']?>' required>
                                 </div>
                                 <div class="col-lg-4 col-12 mb-2">
                                     <label class="form-label">Jumlah Anggota Keluarga <sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control desimal-input" name="jmlh_anggota_keluarga" value='<?= $data_setinggs['jmlh_anggota_keluarga']?>' required>
+                                    <input type="text" class="form-control desimal-input" name="jmlh_anggota_keluarga" value='<?= $data_setinggs == NULL ? '': $data_setinggs['jmlh_anggota_keluarga']?>' required>
                                 </div>
                             </div>
                             <div class="col-12 p-0 mt-2">
@@ -114,7 +119,17 @@ session_start();
 
     <?php include "js.php"?>
     <script>
-       $(document).on('keyup', '.desimal-input', function(e) { 
+       $(document).on('keyup', '.desimal-input', function(e) {
+        let value = $(this).val();
+        let decimalsign="0.";
+
+        if(value.length <1){
+            $(this).val(decimalsign+value)
+        }else if (value.length === 1){
+            $(this).val(decimalsign+value)
+        }else{
+            $(this).val(value)
+        };
 
         var regex = /[^\d.]|\.(?=.*\.)/;
         var subst = "";

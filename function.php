@@ -142,6 +142,8 @@ function setting($form){
     if($hasilhitung>1){
         set_flash_message('failed_settings', 'Jumlah Total tidak boleh lebih dari 1');
         return redirect('settings.php');
+    }else{
+        set_flash_message('success_settings', 'Berhasil Di Simpan');
     }
 
     $mysql = $connection->query("SELECT *FROM settings");
