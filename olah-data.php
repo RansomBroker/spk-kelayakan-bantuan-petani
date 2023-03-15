@@ -16,7 +16,11 @@
     }
 
     if (isset($_POST['data-alternatif'])) {
-        tambah_data_alternatif($_POST);
+        if ($_POST['id-alternatif'] === "") {
+            tambah_data_alternatif($_POST);
+        } else {
+            update_data_alternatif($_POST);
+        }
 
     }
 
@@ -151,6 +155,7 @@
                         <h5>Input Nilai Alternatif</h5>
                         <form method="POST" id="form-alternatif">
                             <input type="text" name="id-petani" value="" class="d-none">
+                            <input type="text" name="id-alternatif" value="" class="d-none">
                             <div class="row">
                                 <div class="col-12 col-lg-4">
                                     <label class="form-label">Kode Petani</label>
@@ -222,7 +227,7 @@
                                             <td><?= $data_alternatif['luas_lahan']?></td>
                                             <td><?= $data_alternatif['penghasilan']?></td>
                                             <td><?= $data_alternatif['hasil_panen']?></td>
-                                            <td><?= $data_alternatif['lama_usaha']?></td>
+                                            <td><?= $data_alternatif['lama_usaha_tani']?></td>
                                             <td><?= $data_alternatif['jmlh_anggota_keluarga']?></td>
                                         </tr>
                                     <?php endforeach;?>
@@ -304,7 +309,7 @@
             /* batal */
             $(".btn-reset").click(function (e) {
                 e.preventDefault();
-                $('.btn-submit').text('Simpan Edit Data')
+                $('.btn-submit').text('Simpan Data')
                 $('input[name=id]').val();
                 $('input[name=kode-petani]').prop('readonly', false);
                 if ($('#table-data-petani tbody tr').hasClass('selected')) {
@@ -321,24 +326,55 @@
 
             let tableDataAlternatif = $("#table-data-alternatif").DataTable();
 
+            $("#table-data-alternatif tbody").on('click', 'tr', function () {
+                let idPetani = $(this).attr('data-id-petani');
+                if ($(this).hasClass('selected')) {
+                    $('.btn-submit').text('Submit')
+                    $('#form-alternatif')[0].reset();
+                    $(this).removeClass('selected bg-primary text-white');
+                } else {
+                    tableDataAlternatif.$('tr.selected').removeClass('selected bg-primary text-white');
+                    $(this).addClass('selected bg-primary text-white');
+                    $('.btn-submit-alternatif').text('Simpan Edit Data')
+                    $.ajax({
+                        url: 'ambil-data-alternatif.php?id=' + idPetani,
+                        method: 'GET',
+                        success: function (response) {
+                            let data = JSON.parse(response)
+                            /* set data jadi isi dari value */
+                            $('input[name=id-petani]').val(data.id_petani);
+                            $('input[name=id-alternatif]').val(idPetani);
+                            $('input[name=luas-lahan]').val(data.luas_lahan);
+                            $('input[name=penghasilan]').val(data.penghasilan);
+                            $('input[name=hasil-panen]').val(data.hasil_panen);
+                            $('input[name=lama-usaha-tani]').val(data.lama_usaha_tani);
+                            $('input[name=jumlah-anggota-keluarga]').val(data.jmlh_anggota_keluarga);
+                            $('input[name=alternatif-nama-petani]').val(data.nama_petani);
+                            $(`#alternatif-kode-petani option[value='${data.id_petani}']`).prop('selected', true);
+                        }
+                    })
+                }
+            })
+
             $(".btn-reset-alternatif").click(function (e) {
                 e.preventDefault();
-                $('.btn-submit-alternatif').text('Simpan Edit Data')
+                $('.btn-submit-alternatif').text('Simpan Data')
                 $('input[name=id-petani]').val();
                 $('#form-alternatif')[0].reset();
             })
 
             /* ambil nama petani */
             $("#alternatif-kode-petani").on('change', function () {
+
+                let id = $(this).val()
+
                 if ($(this).val() === "") {
+                    $('[name=id-petani]').val('')
                     $('input[name=alternatif-nama-petani]').val("")
                     return 0;
                 }
 
-                let id = $(this).val()
-
                 $('[name=id-petani]').val(id)
-                console.log(id)
 
                 $.ajax({
                     url: 'ambil-data-petani.php?id=' + id,
