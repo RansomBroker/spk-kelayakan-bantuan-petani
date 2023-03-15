@@ -15,7 +15,11 @@
         }
     }
 
-    ambil_data_petani();
+    if (isset($_POST['data-alternatif'])) {
+        tambah_data_alternatif($_POST);
+
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,6 +150,7 @@
                         <?php endif;?>
                         <h5>Input Nilai Alternatif</h5>
                         <form method="POST" id="form-alternatif">
+                            <input type="text" name="id-petani" value="" class="d-none">
                             <div class="row">
                                 <div class="col-12 col-lg-4">
                                     <label class="form-label">Kode Petani</label>
@@ -160,9 +165,33 @@
                                     <label class="form-label">Nama Petani</label>
                                     <input class="form-control" value="" name="alternatif-nama-petani" readonly>
                                 </div>
+                                <div class="col-12 col-lg-12 card card-body mt-3">
+                                    <div class="row">
+                                        <div class="col-12 col-lg-3">
+                                            <label class="form-label">Luas Lahan</label>
+                                            <input class="form-control" name="luas-lahan" required/>
+                                        </div>
+                                        <div class="col-12 col-lg-3">
+                                            <label class="form-label">Penghasilan</label>
+                                            <input class="form-control" name="penghasilan" required>
+                                        </div>
+                                        <div class="col-12 col-lg-3">
+                                            <label class="form-label">Hasil Panen</label>
+                                            <input class="form-control" name="hasil-panen" required>
+                                        </div>
+                                        <div class="col-12 col-lg-3">
+                                            <label class="form-label">Lama Usaha Tani</label>
+                                            <input class="form-control" name="lama-usaha-tani" required>
+                                        </div>
+                                        <div class="col-12 col-lg-3">
+                                            <label class="form-label">Jumlah Anggota Keluarga</label>
+                                            <input class="form-control" name="jumlah-anggota-keluarga" required>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-12  mt-2">
                                     <div class="d-flex justify-content-start">
-                                        <button type="submit" name="data-alternatif" class="btn-submit btn btn-primary mr-2">Submit</button>
+                                        <button type="submit" name="data-alternatif" class="btn-submit-alternatif btn btn-primary mr-2">Submit</button>
                                         <button class="btn-reset-alternatif btn btn-danger mx-2">Batal</button>
                                     </div>
                                 </div>
@@ -288,14 +317,29 @@
                 $(this).val($(this).val().toUpperCase())
             })
 
+            /* Data Alternatif */
+
+            let tableDataAlternatif = $("#table-data-alternatif").DataTable();
+
+            $(".btn-reset-alternatif").click(function (e) {
+                e.preventDefault();
+                $('.btn-submit-alternatif').text('Simpan Edit Data')
+                $('input[name=id-petani]').val();
+                $('#form-alternatif')[0].reset();
+            })
+
             /* ambil nama petani */
             $("#alternatif-kode-petani").on('change', function () {
-                if ($(this).val().length < 1) {
+                if ($(this).val() === "") {
                     $('input[name=alternatif-nama-petani]').val("")
                     return 0;
                 }
 
                 let id = $(this).val()
+
+                $('[name=id-petani]').val(id)
+                console.log(id)
+
                 $.ajax({
                     url: 'ambil-data-petani.php?id=' + id,
                     method: 'GET',
