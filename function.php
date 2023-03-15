@@ -129,4 +129,50 @@ function update_data_petani($form) {
 
     redirect('olah-data.php?halaman=olah-data');
 }
+function setting($form){
+    global $connection;
+
+    $luas_lahan= htmlspecialchars(strtolower(stripcslashes($form['luas_lahan'])));
+    $penghasilan= htmlspecialchars(strtolower(stripcslashes($form['penghasilan'])));
+    $hasil_panen= htmlspecialchars(strtolower(stripcslashes($form['hasil_panen'])));
+    $lama_usaha_tani= htmlspecialchars(strtolower(stripcslashes($form['lama_usaha_tani'])));
+    $jmlh_anggota_keluarga = htmlspecialchars(strtolower(stripcslashes($form['jmlh_anggota_keluarga'])));
+
+    $hasilhitung= $luas_lahan+$penghasilan+$hasil_panen+$lama_usaha_tani+$jmlh_anggota_keluarga;
+    if($hasilhitung>1){
+        set_flash_message('failed_settings', 'Jumlah Total tidak boleh lebih dari 1');
+        return redirect('settings.php');
+    }
+
+    $mysql = $connection->query("SELECT *FROM settings");
+    $result=$mysql;
+    $row_cnt = $result->num_rows;
+
+    if($row_cnt>0){
+        $data_setinggs = $connection->query("SELECT * FROM settings")->fetch_assoc();
+        $id = $data_setinggs['id'];
+        $connection->query("
+        UPDATE settings
+        SET 
+            luas_lahan='$luas_lahan',
+            penghasilan='$penghasilan',
+            hasil_panen='$hasil_panen',
+            lama_usaha_tani='$lama_usaha_tani',
+            jmlh_anggota_keluarga='$jmlh_anggota_keluarga'
+        WHERE id = '$id'    
+         ");
+         return redirect('settings.php');
+    }
+    
+    $mysql = $connection->query("INSERT INTO settings (luas_lahan, penghasilan,hasil_panen,lama_usaha_tani,jmlh_anggota_keluarga) VALUES ('$luas_lahan','$penghasilan', '$hasil_panen','$lama_usaha_tani', '$jmlh_anggota_keluarga')");
+    return redirect('settings.php');
+    
+}
+function savesetting(){
+    global $connection;
+
+    $data_setinggs = $connection->query("SELECT * FROM settings")->fetch_assoc();
+    return $data_setinggs;
+}
+
 ?>
