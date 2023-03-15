@@ -81,6 +81,23 @@ function ambil_data_petani() {
     return $data_petani;
 }
 
+function ambil_data_alternatif() {
+    global $connection;
+
+    $data_alternatif = $connection->query("
+        SELECT
+            *
+        FROM
+            data_petani
+        INNER JOIN
+            data_kriteria
+        ON 
+            data_petani.id = data_kriteria.id_petani
+	")->fetch_all(MYSQLI_ASSOC);
+
+    return $data_alternatif;
+}
+
 function update_data_petani($form) {
     global $connection;
 
@@ -158,4 +175,60 @@ function savesetting(){
     return $data_setinggs;
 }
 
+function tambah_data_alternatif($form) {
+    global $connection;
+
+    $luas_lahan= htmlspecialchars(strtolower(stripcslashes($form['luas-lahan'])));
+    $penghasilan= htmlspecialchars(strtolower(stripcslashes($form['penghasilan'])));
+    $hasil_panen= htmlspecialchars(strtolower(stripcslashes($form['hasil-panen'])));
+    $lama_usaha_tani= htmlspecialchars(strtolower(stripcslashes($form['lama-usaha-tani'])));
+    $jmlh_anggota_keluarga = htmlspecialchars(strtolower(stripcslashes($form['jumlah-anggota-keluarga'])));
+    $id_petani = htmlspecialchars(strtolower(stripcslashes($form['id-petani'])));
+
+    $connection->query("
+        INSERT INTO data_kriteria 
+            (id_petani,luas_lahan, penghasilan, hasil_panen, lama_usaha_tani, jmlh_anggota_keluarga)
+        VALUES 
+            ('$id_petani' ,'$luas_lahan', '$penghasilan', '$hasil_panen', '$lama_usaha_tani', '$jmlh_anggota_keluarga')
+    ");
+
+    if ($connection->affected_rows > 0) {
+        set_flash_message('success_alternatif', 'Berhasil tambah data alternatif');
+    } else {
+        set_flash_message('failed_alternatif', 'Gagal tambah data alternatif');
+    }
+
+    redirect('olah-data.php?halaman=olah-data');
+
+}
+
+function update_data_alternatif($form) {
+    global $connection;
+
+    $luas_lahan= htmlspecialchars(strtolower(stripcslashes($form['luas-lahan'])));
+    $penghasilan= htmlspecialchars(strtolower(stripcslashes($form['penghasilan'])));
+    $hasil_panen= htmlspecialchars(strtolower(stripcslashes($form['hasil-panen'])));
+    $lama_usaha_tani= htmlspecialchars(strtolower(stripcslashes($form['lama-usaha-tani'])));
+    $jmlh_anggota_keluarga = htmlspecialchars(strtolower(stripcslashes($form['jumlah-anggota-keluarga'])));
+    $id_alternatif = htmlspecialchars(strtolower(stripcslashes($form['id-alternatif'])));
+
+    $connection->query("
+        UPDATE data_kriteria 
+        SET
+            luas_lahan = '$luas_lahan',
+            penghasilan = '$penghasilan',
+            hasil_panen = '$hasil_panen',
+            lama_usaha_tani = '$lama_usaha_tani',
+            jmlh_anggota_keluarga = '$jmlh_anggota_keluarga'
+        WHERE id = '$id_alternatif'
+        ");
+
+    if ($connection->affected_rows > 0) {
+        set_flash_message('success_alternatif', 'Berhasil update data alternatif');
+    } else {
+        set_flash_message('failed_alternatif', 'Gagal update data alternatif');
+    }
+
+    redirect('olah-data.php?halaman=olah-data');
+}
 ?>
