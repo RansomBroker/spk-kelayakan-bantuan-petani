@@ -56,6 +56,12 @@ function tambah_data_petani($form) {
     $telpon = htmlspecialchars(strtolower(stripcslashes($form['telpon'])));
     $ktp = htmlspecialchars(strtolower(stripcslashes($form['ktp'])));
 
+    /* cehcek apakah ada kode petani yg sama ? */
+    $data_petani = $connection->query("SELECT * FROM data_petani WHERE kode_petani  LIKE  '%$kode_petani%'")->num_rows;
+    if ($data_petani > 0 ) {
+        set_flash_message('failed_tambah_petani', 'Gagal menambahkan data petani. Duplikat Kode Petani');
+        return redirect('olah-data.php?halaman=olah-data');
+    }
     $query = $connection->query("
         INSERT INTO data_petani 
             (kode_petani, nama_petani, alamat, no_telp, no_ktp, tgl_pemohonan)
@@ -69,7 +75,7 @@ function tambah_data_petani($form) {
         set_flash_message('failed_tambah_petani', 'Gagal menambahkan data petani');
     }
 
-    redirect('olah-data.php?halaman=olah-data');
+    return redirect('olah-data.php?halaman=olah-data');
 
 }
 
