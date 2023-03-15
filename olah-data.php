@@ -5,12 +5,11 @@
     if(!isset($_SESSION['login'])){
         redirect('login.php');
     }
+
     if (isset($_POST['data-petani'])) {
         if ($_POST['id'] != "") {
             update_data_petani($_POST);
-        }
-
-        if ($_POST['id'] = "") {
+        } else {
             tambah_data_petani($_POST);
         }
     }

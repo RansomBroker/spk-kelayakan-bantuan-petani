@@ -187,6 +187,11 @@ function tambah_data_alternatif($form) {
     $jmlh_anggota_keluarga = htmlspecialchars(strtolower(stripcslashes($form['jumlah-anggota-keluarga'])));
     $id_petani = htmlspecialchars(strtolower(stripcslashes($form['id-petani'])));
 
+    if ($luas_lahan > 5 || $penghasilan > 5 || $hasil_panen > 5 || $lama_usaha_tani > 5 || $jmlh_anggota_keluarga > 5 ) {
+        set_flash_message('failed_alternatif', 'Form Input Alternatif Tidak boleh dari 5');
+        redirect('olah-data.php?halaman=olah-data');
+    }
+
     $connection->query("
         INSERT INTO data_kriteria 
             (id_petani,luas_lahan, penghasilan, hasil_panen, lama_usaha_tani, jmlh_anggota_keluarga)
@@ -213,6 +218,11 @@ function update_data_alternatif($form) {
     $lama_usaha_tani= htmlspecialchars(strtolower(stripcslashes($form['lama-usaha-tani'])));
     $jmlh_anggota_keluarga = htmlspecialchars(strtolower(stripcslashes($form['jumlah-anggota-keluarga'])));
     $id_alternatif = htmlspecialchars(strtolower(stripcslashes($form['id-alternatif'])));
+
+    if ($luas_lahan > 5 || $penghasilan > 5 || $hasil_panen > 5 || $lama_usaha_tani > 5 || $jmlh_anggota_keluarga > 5 ) {
+        set_flash_message('failed_alternatif', 'Form Input Alternatif Tidak boleh dari 5');
+        redirect('olah-data.php?halaman=olah-data');
+    }
 
     $connection->query("
         UPDATE data_kriteria 
