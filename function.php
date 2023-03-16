@@ -43,7 +43,9 @@ function login($form) {
             $_SESSION['login']=true;
 			header('Location:index.php');
 			exit;
-		}
+		} else{
+            set_flash_massage('register_success','Username atau password tidak ditemukan');
+        }
 	}
 }  
 
@@ -145,7 +147,7 @@ function setting($form){
     $hasil_panen= htmlspecialchars(strtolower(stripcslashes($form['hasil_panen'])));
     $lama_usaha_tani= htmlspecialchars(strtolower(stripcslashes($form['lama_usaha_tani'])));
     $jmlh_anggota_keluarga = htmlspecialchars(strtolower(stripcslashes($form['jmlh_anggota_keluarga'])));
-
+    $v= htmlspecialchars(strtolower(stripcslashes($form['v'])));
     $hasilhitung= $luas_lahan+$penghasilan+$hasil_panen+$lama_usaha_tani+$jmlh_anggota_keluarga;
     if($hasilhitung>1){
         set_flash_message('failed_settings', 'Jumlah Total tidak boleh lebih dari 1');
@@ -168,13 +170,14 @@ function setting($form){
             penghasilan='$penghasilan',
             hasil_panen='$hasil_panen',
             lama_usaha_tani='$lama_usaha_tani',
-            jmlh_anggota_keluarga='$jmlh_anggota_keluarga'
+            jmlh_anggota_keluarga='$jmlh_anggota_keluarga',
+            v= '$v'
         WHERE id = '$id'    
          ");
          return redirect('settings.php');
     }
     
-    $mysql = $connection->query("INSERT INTO settings (luas_lahan, penghasilan,hasil_panen,lama_usaha_tani,jmlh_anggota_keluarga) VALUES ('$luas_lahan','$penghasilan', '$hasil_panen','$lama_usaha_tani', '$jmlh_anggota_keluarga')");
+    $mysql = $connection->query("INSERT INTO settings (luas_lahan, penghasilan,hasil_panen,lama_usaha_tani,jmlh_anggota_keluarga,v) VALUES ('$luas_lahan','$penghasilan', '$hasil_panen','$lama_usaha_tani', '$jmlh_anggota_keluarga','$v')");
     return redirect('settings.php');
     
 }

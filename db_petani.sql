@@ -1,12 +1,10 @@
 /*
  Navicat Premium Data Transfer
-
  Source Server         : lnpp-8-mysql
  Source Server Type    : MySQL
  Source Server Version : 50722
  Source Host           : 17.17.17.5:3306
  Source Schema         : db_petani
-
  Target Server Type    : MySQL
  Target Server Version : 50722
  File Encoding         : 65001
@@ -89,4 +87,4 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-SET FOREIGN_KEY_CHECKS = 1;
+SET FOREIGN_KEY_CHECKS = 1
