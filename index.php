@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "helper.php";
+include "function.php";
 if(!isset($_SESSION['login'])){
     redirect('login.php');
 }
