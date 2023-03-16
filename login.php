@@ -1,3 +1,15 @@
+<?php 
+	session_start();
+	include "function.php";
+
+	if(isset($_POST) && count($_POST) > 0) {
+		login($_POST);
+	}
+
+	if(isset($_SESSION['login'])){
+		redirect('index.php');
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +22,12 @@
 <body class="bg-success bg-opacity-75 d-flex justify-content-center align-items-center vh-100">
 	<div class="mx-5 py-5 card rounded login w-25 ">
 		<div class="card-body">
+		<?php if(get_flash_name('register_success') != ""):?>
+			<div class="alert alert-danger" role="alert">
+				<?= get_flash_message('register_success')?>
+			</div>	
+		<?php endif;?>
+
 			<form class="" method="POST" action="">
 				<div class="d-flex flex-row justify-content-center">
 					<div class="d-flex flex-column">
