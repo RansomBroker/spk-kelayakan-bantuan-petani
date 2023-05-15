@@ -37,6 +37,18 @@ if(!isset($_SESSION['login'])){
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                     </div>
+
+                    <?php if (get_flash_name('success_kalkulasi') != ""):?>
+                        <div class="alert alert-success">
+                            <?= get_flash_message('success_kalkulasi')?>
+                        </div>
+                    <?php endif;?>
+                    <?php if (get_flash_name('failed_kalkulasi') != ""):?>
+                        <div class="alert alert-danger">
+                            <?= get_flash_message('failed_kalkulasi')?>
+                        </div>
+                    <?php endif;?>
+
                     <div class="card card-body my-3">
                         <h5 class="card-title">Data Alternatif</h5>
                         <div class="table-responsive">
@@ -70,7 +82,7 @@ if(!isset($_SESSION['login'])){
                     </div>
                     <div class="col-12  mt-2">
                         <div class="d-flex justify-content-center">
-                        <a href="proses-vikor.php"class=" btn btn-primary mr-2">Proses Vikor</a>
+                            <a href="proses-vikor.php"class=" btn btn-primary mr-2">Proses Vikor</a>
 
                         </div>
                     </div>
