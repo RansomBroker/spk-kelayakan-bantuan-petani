@@ -393,8 +393,6 @@ function proses_vikor() {
             }
         }
     }catch (Throwable $e) {
-        var_dump($e);
-        die;
         set_flash_message("failed_kalkulasi", "Gagal menentukan nilai max dan min");
     }
     return redirect('index.php');
